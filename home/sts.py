@@ -20,6 +20,5 @@ class Sts():
         cos_score = util.pytorch_cos_sim(query_emb, self.embcor)[0]
         cos_score = cos_score.cpu() 
         self.idx  = np.argpartition(-cos_score, range(self.line))[0 : self.line]   
-        texts     = [self.corpus[idx] for idx in self.idx]
 
         return list(self.idx.tolist())

@@ -79,17 +79,16 @@ def get_post(request) :
             output    = get_output(para_sum, result, string)
             context   = make_dict(' '.join(get_clean_text(path + '/' + pdf.name)), ' '.join([text[1] for text in output]), os.listdir(img_path))
             make_pdf(output, img_list, 'final/static/pdf/new_' + pdf.name) 
-            
         except :  ## text
-            pp = slicing(text)
-            string = ''
-            for p in pp :
-                string += kobart.summary(p)
-            context = make_dict(word, string, [])
-            
+            pp        = slicing(text, 256)
+            indices   = [i for i in range(len(pp)) if word in pp[i]]
+            temp      = [kobart.summary(pp[idx]) for idx in indices]
+            string    = ' '.join(temp)
+            sts.set_corpus(temp)
+            query     = kobart.summary(string)
+            result    = sts.similarity(query)
+            context   = make_dict(text, ' '.join([temp[idx] for idx in result]), [])   
     else :
         uf = UploadForm
         context = make_dict('text', 'summ', [])
     return render(request, 'result.html', context)
-
-    

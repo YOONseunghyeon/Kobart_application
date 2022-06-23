@@ -168,9 +168,8 @@ def clean_text(texts) :
 def get_clean_text(file) :    # args : path, file ex) 'media', 'name.pdf' return : text (string)
     return clean_text(get_text(file)) 
 
-def slicing(para) :
+def slicing(para, c = 512) :
     temp   = []
-    c      = 512
     string = ''
     for text in para.split('.') :
         if len(string) + len(text) > c :
