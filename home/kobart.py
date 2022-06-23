@@ -19,5 +19,15 @@ class Kobart :
                                             eos_token_id = 1)
         return self.tokenizer.decode(summary_ids.squeeze().tolist(), skip_special_tokens = True)
     
+    def para_summary(self, pp, para_list) :
+        para_sum   = []       # 문단별 요약
+        for p in pp :
+            summ = []
+            if p[0] not in para_list : continue
+            for text in p[1] :
+                summ.append(self.summary(text))
+            para_sum.append((p[0], summ))        
+        return para_sum
+    
     def __str__(self) :
         return 'KoBART'
