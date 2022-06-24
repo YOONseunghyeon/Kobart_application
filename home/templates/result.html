@@ -62,6 +62,15 @@
                     <div class="form-floating">
                         <textarea class="form-control" style="background-color:transparent; height: 12rem;" readonly>{{summary}}</textarea> <!--height: "12rem"-->
                         <label for="Summary">result</label>
+                        <div><br>
+                            <label>Summary pdf file download</label>
+                            <form action='/download', method='POST' enctype='multipart/form-data'>
+                                {% csrf_token %}
+                                <button type='submit'>
+                                    Download
+                                </button>
+                            </form>
+                        </div>
                     </div><br>Images<br>
                     {% for i in img%}
                         <img src="{% get_static_prefix %}img/{{i}}"><br>

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
 from .form import UploadForm, Document
 from .kobart import Kobart
@@ -78,7 +78,7 @@ def get_post(request) :
             result    = sts.similarity(query)
             output    = get_output(para_sum, result, string)
             context   = make_dict(' '.join(get_clean_text(path + '/' + pdf.name)), ' '.join([text[1] for text in output]), os.listdir(img_path))
-            make_pdf(output, img_list, 'final/static/pdf/new_' + pdf.name) 
+            make_pdf(output, img_list, 'final/static/pdf/' + 'summary.pdf') 
         except :  ## text
             pp        = slicing(text, 256)
             indices   = [i for i in range(len(pp)) if word in pp[i]]
@@ -92,3 +92,9 @@ def get_post(request) :
         uf = UploadForm
         context = make_dict('text', 'summ', [])
     return render(request, 'result.html', context)
+
+def download(request) :
+    path     = 'final/static/pdf/'
+    response = HttpResponse(open(path + 'summary.pdf', 'rb'), content_type = 'application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="summary.pdf"'
+    return response
